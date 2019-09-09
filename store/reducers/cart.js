@@ -1,4 +1,4 @@
-import ADD_TO_CART from "../actions/cart";
+import { ADD_TO_CART} from "../actions/cart";
 import CartItem from "../../models/cartItem";
 
 const initialState = {
@@ -7,6 +7,7 @@ const initialState = {
 };
 
 export default (state = initialState, action) => {
+  console.log(action.type);
   switch (action.type) {
     case ADD_TO_CART:
       const addedProduct = action.payload.product;
@@ -24,7 +25,7 @@ export default (state = initialState, action) => {
         );
         return {
           ...state,
-          items: {...state.items, [addedProduct.id]: updatedCartItem},
+          items: {...state.items, [addedProduct.id]: updatedOrNewCartItem},
           totalAmount: state.totalAmount + prodPrice
         };
       } else {
