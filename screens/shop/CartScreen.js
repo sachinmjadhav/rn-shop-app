@@ -1,14 +1,22 @@
-import React from "react";
-import {View, Text, FlatList, StyleSheet, Button} from "react-native";
-import {useSelector, useDispatch} from "react-redux";
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  Button,
+  ActivityIndicator
+} from "react-native";
+import { useSelector, useDispatch } from "react-redux";
 
 import CartItem from "../../components/shop/CartItem";
-import Card from '../../components/UI/Card';
+import Card from "../../components/UI/Card";
 import * as cartActions from "../../store/actions/cart";
 import * as ordersActions from "../../store/actions/orders";
 import colors from "../../constants/colors";
 
 const CartScreen = props => {
+  const [isLoading, setIsLoading] = useState(false);
   const cartTotalAmount = useSelector(
     state => state.cart.totalAmount
   );
@@ -30,6 +38,14 @@ const CartScreen = props => {
 
   const dispatch = useDispatch();
 
+  const sendOrderHandler = async () => {
+    setIsLoading(true);
+    await dispatch(
+      ordersActions.addOrder(cartItems, cartTotalAmount)
+    );
+    setIsLoading(false);
+  };
+
   return (
     <View style={styles.screen}>
       <Card style={styles.summary}>
@@ -39,16 +55,16 @@ const CartScreen = props => {
             ${Math.round(cartTotalAmount.toFixed(2) * 100) / 100}
           </Text>
         </Text>
-        <Button
-          title="Order Now"
-          disabled={cartItems.length === 0}
-          onPress={() => {
-            dispatch(
-              ordersActions.addOrder(cartItems, cartTotalAmount)
-            );
-          }}
-          color={colors.accent}
-        />
+        {isLoading ? (
+          <ActivityIndicator size="small" color={colors.primary} />
+        ) : (
+          <Button
+            title="Order Now"
+            disabled={cartItems.length === 0}
+            onPress={sendOrderHandler}
+            color={colors.accent}
+          />
+        )}
       </Card>
 
       <View>
@@ -87,7 +103,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     marginBottom: 20,
-    padding: 10,
+    padding: 10
   },
   summaryText: {
     fontFamily: "open-sans-bold",

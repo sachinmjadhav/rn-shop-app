@@ -5,7 +5,7 @@ const PRODUCTS = [
     'p1',
     'u1',
     'Red Shirt',
-    'https://cdn.pixabay.com/photo/2016/10/02/22/17/red-t-shirt-1710578_1280.jpg',
+    'https://cdn.pixabay.com/photo/2016/12/06/09/31/blank-1886008_960_720.png',
     'A red t-shirt, perfect for days with non-red weather.',
     29.99
   ),
@@ -28,7 +28,7 @@ const PRODUCTS = [
   new Product(
     'p4',
     'u3',
-    'The Book - Limited Edition',
+    'The Book',
     'https://images.pexels.com/photos/46274/pexels-photo-46274.jpeg?cs=srgb&dl=blur-blurred-book-pages-46274.jpg&fm=jpg',
     "What the content is? Why would that matter? It's a limited edition!",
     15.99

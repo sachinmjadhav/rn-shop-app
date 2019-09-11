@@ -1,5 +1,5 @@
-import React, {useReducer, useEffect} from "react";
-import {View, Text, StyleSheet, TextInput} from "react-native";
+import React, { useReducer, useEffect } from "react";
+import { View, Text, StyleSheet, TextInput } from "react-native";
 
 const INPUT_CHANGE = "INPUT_CHANGE";
 const INPUT_BLUR = "INPUT_BLUR";
@@ -29,7 +29,7 @@ const Input = props => {
     touched: false
   });
 
-  const {onInputChange, id} = props;
+  const { onInputChange, id } = props;
 
   useEffect(() => {
     if (inputState.touched) {
@@ -55,11 +55,14 @@ const Input = props => {
     if (props.minLength != null && text.length < props.minLength) {
       isValid = false;
     }
-    dispatch({type: INPUT_CHANGE, payload: {value: text, isValid}});
+    dispatch({
+      type: INPUT_CHANGE,
+      payload: { value: text, isValid: isValid }
+    });
   };
 
   const lostFocusHandler = () => {
-    dispatch({type: INPUT_BLUR});
+    dispatch({ type: INPUT_BLUR });
   };
 
   return (
@@ -69,7 +72,7 @@ const Input = props => {
         {...props}
         style={styles.input}
         value={inputState.value}
-        onChangeText={val => textChangeHandler(val)}
+        onChangeText={textChangeHandler}
         onBlur={lostFocusHandler}
       />
       {!inputState.isValid && inputState.touched && (
@@ -99,8 +102,8 @@ const styles = StyleSheet.create({
     marginVertical: 5
   },
   errorText: {
-    fontFamily: 'open-sans',
-    color: 'red',
+    fontFamily: "open-sans",
+    color: "red",
     fontSize: 13
   }
 });

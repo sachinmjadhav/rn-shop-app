@@ -1,7 +1,7 @@
 import React from "react";
-import {FlatList, Platform, Button, Alert} from "react-native";
-import {useSelector, useDispatch} from "react-redux";
-import {HeaderButtons, Item} from "react-navigation-header-buttons";
+import { FlatList, Platform, Button, Alert } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
+import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
 import HeaderButton from "../../components/UI/HeaderButton";
 import ProductItem from "../../components/shop/ProductItem";
@@ -14,7 +14,7 @@ const UserProductsScreen = props => {
   );
   const dispatch = useDispatch();
   const editProductHandler = id => {
-    props.navigation.navigate("EditProduct", {productId: id});
+    props.navigation.navigate("EditProduct", { productId: id });
   };
 
   const deleteHandler = id => {
@@ -22,7 +22,7 @@ const UserProductsScreen = props => {
       "Are you sure?",
       "Do you really want to delete this item?",
       [
-        {text: "No", style: "default"},
+        { text: "No", style: "default" },
         {
           text: "Yes",
           style: "destructive",
