@@ -106,7 +106,7 @@ const AuthNavigator = createStackNavigator({
   defaultNavigationOptions: defaultNavOptions
 });
 
-const MainNavigator = createStackNavigator({
+const MainNavigator = createSwitchNavigator({
   Auth: AuthNavigator,
   Shop: ShopNavigator
 });

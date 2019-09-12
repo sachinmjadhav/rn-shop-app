@@ -1,10 +1,17 @@
-import React, { useReducer, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useReducer,
+  useCallback
+} from "react";
 import {
   ScrollView,
   StyleSheet,
   View,
   Button,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  ActivityIndicator,
+  Alert
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch } from "react-redux";
@@ -41,15 +48,55 @@ const formReducer = (state, action) => {
 };
 
 const AuthScreen = props => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState();
+  const [isSignup, setIsSignup] = useState(false);
   const dispatch = useDispatch();
 
-  const signupHandler = () => {
-    dispatch(
-      authActions.signup(
+  const [formState, dispatchFormState] = useReducer(formReducer, {
+    inputValues: {
+      email: "",
+      password: ""
+    },
+    inputValidities: {
+      email: false,
+      password: false
+    },
+    formIsValid: false
+  });
+
+  useEffect(() => {
+    props.navigation.setParams({ isSignup })
+  }, [isSignup]);
+
+  useEffect(() => {
+    if (error) {
+      Alert.alert("An Error Occurred!", error, [{ text: "Okay" }]);
+    }
+  }, [error]);
+
+  const authHandler = async () => {
+    let action;
+    if (isSignup) {
+      action = authActions.signup(
         formState.inputValues.email,
         formState.inputValues.password
-      )
-    );
+      );
+    } else {
+      action = authActions.login(
+        formState.inputValues.email,
+        formState.inputValues.password
+      );
+    }
+    setError(null);
+    setIsLoading(true);
+    try {
+      await dispatch(action);
+      props.navigation.navigate('Shop');
+    } catch (error) {
+      setError(error.message);
+      setIsLoading(false);
+    }
   };
 
   const inputChangeHandler = useCallback(
@@ -63,18 +110,6 @@ const AuthScreen = props => {
     },
     [dispatchFormState]
   );
-
-  const [formState, dispatchFormState] = useReducer(formReducer, {
-    inputValues: {
-      email: "",
-      password: ""
-    },
-    inputValidities: {
-      email: false,
-      password: false
-    },
-    formIsValid: false
-  });
 
   return (
     <KeyboardAvoidingView
@@ -113,17 +148,24 @@ const AuthScreen = props => {
               initialValue=""
             />
             <View style={styles.buttonContainer}>
-              <Button
-                title="Login"
-                color={colors.primary}
-                onPress={signupHandler}
-              />
+              {isLoading ? (
+                <ActivityIndicator
+                  size="small"
+                  color={colors.primary}
+                />
+              ) : (
+                <Button
+                  title={isSignup ? "Sign Up" : "Login"}
+                  color={colors.primary}
+                  onPress={authHandler}
+                />
+              )}
             </View>
             <View style={styles.buttonContainer}>
               <Button
-                title="Switch to Sign Up"
-                color={colors.primary}
-                onPress={() => {}}
+                title={`Switch to ${isSignup ? "Login" : "Sign Up"}`}
+                color={colors.accent}
+                onPress={() => setIsSignup(prev => !prev)}
               />
             </View>
           </ScrollView>
@@ -134,8 +176,9 @@ const AuthScreen = props => {
 };
 
 AuthScreen.navigationOptions = navData => {
+  const isSignup = navData.navigation.getParam('isSignup');
   return {
-    headerTitle: "Authenticate"
+    headerTitle: isSignup ? "Sign Up" : "Login"
   };
 };
 

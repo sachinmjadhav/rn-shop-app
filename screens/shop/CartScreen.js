@@ -67,25 +67,42 @@ const CartScreen = props => {
         )}
       </Card>
 
-      <View>
-        <FlatList
-          keyExtractor={item => item.productId}
-          data={cartItems}
-          renderItem={itemData => (
-            <CartItem
-              quantity={itemData.item.quantity}
-              title={itemData.item.productTitle}
-              amount={itemData.item.sum}
-              deleteable
-              onRemove={() => {
-                dispatch(
-                  cartActions.removeFromCart(itemData.item.productId)
-                );
-              }}
+      {cartItems.length === 0 ? (
+        <View style={styles.emptyCart}>
+          <View>
+            <Text style={{ fontSize: 16 }}>Cart Empty.</Text>
+          </View>
+          <View>
+            <Button
+              title="Add Items"
+              color={colors.primary}
+              onPress={() => props.navigation.navigate('ProductsOverview')}
             />
-          )}
-        />
-      </View>
+          </View>
+        </View>
+      ) : (
+        <View>
+          <FlatList
+            keyExtractor={item => item.productId}
+            data={cartItems}
+            renderItem={itemData => (
+              <CartItem
+                quantity={itemData.item.quantity}
+                title={itemData.item.productTitle}
+                amount={itemData.item.sum}
+                deleteable
+                onRemove={() => {
+                  dispatch(
+                    cartActions.removeFromCart(
+                      itemData.item.productId
+                    )
+                  );
+                }}
+              />
+            )}
+          />
+        </View>
+      )}
     </View>
   );
 };
@@ -111,6 +128,10 @@ const styles = StyleSheet.create({
   },
   amount: {
     color: colors.primary
+  },
+  emptyCart: {
+    alignItems: "center",
+    justifyContent: "center"
   }
 });
 
