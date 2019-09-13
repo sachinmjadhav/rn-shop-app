@@ -109,7 +109,13 @@ const ShopNavigator = createDrawerNavigator(
     contentComponent: props => {
       const dispatch = useDispatch();
       return (
-        <View style={{ flex: 1, paddingVertical: 30 }}>
+        <View
+          style={{
+            flex: 1,
+            paddingVertical: 30,
+            justifyContent: "space-between"
+          }}
+        >
           <SafeAreaView
             forceInset={{ top: "always", horizontal: "never" }}
           >
@@ -119,6 +125,7 @@ const ShopNavigator = createDrawerNavigator(
               color={colors.primary}
               onPress={() => {
                 dispatch(authActions.logout());
+                props.navigation.navigate("Auth");
               }}
             />
           </SafeAreaView>

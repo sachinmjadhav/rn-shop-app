@@ -7,7 +7,7 @@ let timer;
 
 export const authenticate = (userId, token, expiryTime) => {
   return dispatch => {
-    dispatch(setLogoutTimer(expiryTime));
+    // dispatch(setLogoutTimer(expiryTime));
     dispatch({
       type: AUTHENTICATE,
       payload: {
@@ -115,26 +115,26 @@ export const login = (email, password) => {
 };
 
 export const logout = () => {
-  clearLogoutTimer();
+  // clearLogoutTimer();
   AsyncStorage.removeItem("userData");
   return {
     type: LOGOUT
   };
 };
 
-const clearLogoutTimer = () => {
-  if (timer) {
-    clearTimeout(timer);
-  }
-};
+// const clearLogoutTimer = () => {
+//   if (timer) {
+//     clearTimeout(timer);
+//   }
+// };
 
-const setLogoutTimer = expirationTime => {
-  return dispatch => {
-    timer = setTimeout(() => {
-      dispatch(logout());
-    }, expirationTime);
-  };
-};
+// const setLogoutTimer = expirationTime => {
+//   return dispatch => {
+//     timer = setTimeout(() => {
+//       dispatch(logout());
+//     }, expirationTime);
+//   };
+// };
 
 const saveDataToStorage = (token, userId, expirationDate) => {
   AsyncStorage.setItem(
