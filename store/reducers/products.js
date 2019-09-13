@@ -1,4 +1,3 @@
-import PRODUCTS from "../../data/dummy-data";
 import {
   DELETE_PRODUCT,
   CREATE_PRODUCT,
@@ -17,9 +16,7 @@ export default (state = initialState, action) => {
     case SET_PRODUCTS:
       return {
         availableProducts: action.payload.products,
-        userProducts: action.payload.products.filter(
-          prod => prod.ownerId === action.payload.userProducts
-        )
+        userProducts: action.payload.userProducts
       };
 
     case CREATE_PRODUCT:
