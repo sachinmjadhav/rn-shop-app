@@ -9,7 +9,6 @@ const NavigationContainer = props => {
   const isAuth = useSelector(state => state.auth.token);
 
   useEffect(() => {
-    console.log(isAuth);
     if (!isAuth) {
       navRef.current.dispatch(
         NavigationActions.navigate({ routeName: "Auth" })

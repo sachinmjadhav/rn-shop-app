@@ -6,6 +6,7 @@ import {
   Platform,
   Button,
   StyleSheet,
+  TouchableOpacity,
   ActivityIndicator
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
@@ -106,13 +107,15 @@ const ProductsOverviewScreen = props => {
             selectItemHandler(itemData.item.id, itemData.item.title)
           }
         >
-          <Button
-            title="View Details"
-            color={colors.primary}
-            onPress={() =>
-              selectItemHandler(itemData.item.id, itemData.item.title)
-            }
-          />
+          <TouchableOpacity>
+            <Button
+              title="View Details"
+              color={colors.primary}
+              onPress={() =>
+                selectItemHandler(itemData.item.id, itemData.item.title)
+              }
+            />
+          </TouchableOpacity>
           <Button
             title="To Cart"
             color={colors.primary}

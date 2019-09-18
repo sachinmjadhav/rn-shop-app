@@ -9,8 +9,8 @@ export default (state = initialState, action) => {
   switch(action.type) {
     case AUTHENTICATE:
       return {
-        token: action.token,
-        userId: action.userId
+        token: action.payload.token,
+        userId: action.payload.userId
       };
 
     case LOGOUT:

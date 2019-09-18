@@ -5,47 +5,41 @@ export const CREATE_PRODUCT = "CREATE_PRODUCT";
 export const UPDATE_PRODUCT = "UPDATE_PRODUCT";
 export const SET_PRODUCTS = "SET_PRODUCTS";
 
-export const fetchProducts = () => {
-  return async (dispatch, getState) => {
-    const userId = getState().auth.userId;
-    try {
-      const response = await fetch(
-        "https://rn-shop-app-40a24.firebaseio.com/products.json"
-      );
-
-      if (!response.ok) {
-        throw new Error("Something went wrong!");
-      }
-
-      const resData = await response.json();
-      const loadedProducts = [];
-
-      for (const key in resData) {
-        loadedProducts.push(
-          new Product(
-            key,
-            userId,
-            resData[key].title,
-            resData[key].imageUrl,
-            resData[key].description,
-            resData[key].price
-          )
-        );
-      }
-
-      dispatch({
-        type: SET_PRODUCTS,
-        payload: {
-          products: loadedProducts,
-          userProducts: loadedProducts.filter(
-            prod => prod.ownerId === userId
-          )
-        }
-      });
-    } catch (error) {
-      throw err;
+export const fetchProducts = () => async (dispatch, getState) => {
+  const userId = getState().auth.userId;
+  try {
+    const response = await fetch(
+      "https://rn-shop-app-40a24.firebaseio.com/products.json"
+    );
+    if (!response.ok) {
+      throw new Error("Something went wrong!");
     }
-  };
+    const resData = await response.json();
+    const loadedProducts = [];
+    for (const key in resData) {
+      loadedProducts.push(
+        new Product(
+          key,
+          resData[key].ownerId,
+          resData[key].title,
+          resData[key].imageUrl,
+          resData[key].description,
+          resData[key].price
+        )
+      );
+    }
+    dispatch({
+      type: SET_PRODUCTS,
+      payload: {
+        products: loadedProducts,
+        userProducts: loadedProducts.filter(
+          prod => prod.ownerId === userId
+        )
+      }
+    });
+  } catch (error) {
+    throw err;
+  }
 };
 
 export const deleteProduct = productId => {

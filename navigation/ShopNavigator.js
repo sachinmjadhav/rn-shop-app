@@ -118,16 +118,22 @@ const ShopNavigator = createDrawerNavigator(
         >
           <SafeAreaView
             forceInset={{ top: "always", horizontal: "never" }}
+            style={{
+              flex: 1,
+              justifyContent: "space-between"
+            }}
           >
             <DrawerNavigatorItems {...props} />
-            <Button
-              title="Logout"
-              color={colors.primary}
-              onPress={() => {
-                dispatch(authActions.logout());
-                props.navigation.navigate("Auth");
-              }}
-            />
+            <View style={{ alignItems: "center" }}>
+              <Button
+                title="Logout"
+                color={colors.primary}
+                onPress={() => {
+                  dispatch(authActions.logout());
+                  props.navigation.navigate("Auth");
+                }}
+              />
+            </View>
           </SafeAreaView>
         </View>
       );
