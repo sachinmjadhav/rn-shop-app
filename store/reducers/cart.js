@@ -12,8 +12,11 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case ADD_TO_CART:
       const addedProduct = action.payload.product;
-      const prodPrice = addedProduct.price;
-      const prodTitle = addedProduct.title;
+      if(!addedProduct.id) {
+        addedProduct.id = addedProduct.productId
+      }
+      const prodPrice = addedProduct.price || addedProduct.productPrice;
+      const prodTitle = addedProduct.title || addedProduct.productTitle;
 
       let updatedOrNewCartItem;
 
