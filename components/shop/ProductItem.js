@@ -9,7 +9,7 @@ import {
   Platform
 } from "react-native";
 
-import Card from '../../components/UI/Card';
+import Card from "../../components/UI/Card";
 
 let TouchableCmp = TouchableOpacity;
 if (Platform.OS === "android" && Platform.Version >= 21) {
@@ -17,22 +17,21 @@ if (Platform.OS === "android" && Platform.Version >= 21) {
 }
 
 const ProductItem = props => {
-  const {image, title, price, onSelect} = props;
+  const { image, title, price, onSelect } = props;
+
   return (
     <Card style={styles.product}>
       <View style={styles.touchable}>
         <TouchableCmp onPress={onSelect} useForeground>
           <View>
             <View style={styles.imageContainer}>
-              <Image style={styles.image} source={{uri: image}} />
+              <Image style={styles.image} source={{ uri: image }} />
             </View>
             <View style={styles.details}>
               <Text style={styles.title}>{title}</Text>
               <Text style={styles.price}>${price.toFixed(2)}</Text>
             </View>
-            <View style={styles.actions}>
-              {props.children}
-            </View>
+            <View style={styles.actions}>{props.children}</View>
           </View>
         </TouchableCmp>
       </View>
@@ -46,7 +45,7 @@ const styles = StyleSheet.create({
     margin: 20
   },
   touchable: {
-    overflow: 'hidden',
+    overflow: "hidden",
     borderRadius: 10
   },
   imageContainer: {
@@ -68,12 +67,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     marginVertical: 2,
-    fontFamily: 'open-sans-bold',
+    fontFamily: "open-sans-bold"
   },
   price: {
     fontSize: 14,
     color: "#888",
-    fontFamily: 'open-sans',
+    fontFamily: "open-sans"
   },
   actions: {
     flexDirection: "row",

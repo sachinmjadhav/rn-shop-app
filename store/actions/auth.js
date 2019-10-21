@@ -16,18 +16,21 @@ export const authenticate = (userId, token) => dispatch => {
   });
 };
 
-export const signup = (email, password) => async (dispatch) => {
-  const response = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCXuxrnbMrswrD2GjccwUUwrsQvKU42NFs`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      email,
-      password,
-      returnSecureToken: true
-    })
-  });
+export const signup = (email, password) => async dispatch => {
+  const response = await fetch(
+    `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCXuxrnbMrswrD2GjccwUUwrsQvKU42NFs`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email,
+        password,
+        returnSecureToken: true
+      })
+    }
+  );
   if (!response.ok) {
     const errorResData = await response.json();
     const errorId = errorResData.error.message;
@@ -39,37 +42,49 @@ export const signup = (email, password) => async (dispatch) => {
   }
   const resData = await response.json();
   dispatch(authenticate(resData.localId, resData.idToken));
-  const expirationDate = new Date(new Date().getTime() + parseInt(resData.expiresIn) * 1000);
+  const expirationDate = new Date(
+    new Date().getTime() + parseInt(resData.expiresIn) * 1000
+  );
   saveDataToStorage(resData.idToken, resData.localId, expirationDate);
 };
 
-export const login = (email, password) => async (dispatch) => {
-  const response = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCXuxrnbMrswrD2GjccwUUwrsQvKU42NFs`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      email,
-      password,
-      returnSecureToken: true
-    })
-  });
+export const login = (email, password) => async dispatch => {
+  const response = await fetch(
+    `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCXuxrnbMrswrD2GjccwUUwrsQvKU42NFs`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email,
+        password,
+        returnSecureToken: true
+      })
+    }
+  );
   if (!response.ok) {
     const errorResData = await response.json();
     const errorId = errorResData.error.message;
     let message = "Something went wrong!";
     if (errorId === "EMAIL_NOT_FOUND") {
       message = "Email not registered!";
-    }
-    else if (errorId === "INVALID_PASSWORD") {
+    } else if (errorId === "INVALID_PASSWORD") {
       message = "Invalid Password!";
     }
     throw new Error(message);
   }
   const resData = await response.json();
-  dispatch(authenticate(resData.localId, resData.idToken, parseInt(resData.expiresIn) * 1000));
-  const expirationDate = new Date(new Date().getTime() + parseInt(resData.expiresIn) * 1000);
+  dispatch(
+    authenticate(
+      resData.localId,
+      resData.idToken,
+      parseInt(resData.expiresIn) * 1000
+    )
+  );
+  const expirationDate = new Date(
+    new Date().getTime() + parseInt(resData.expiresIn) * 1000
+  );
   saveDataToStorage(resData.idToken, resData.localId, expirationDate);
 };
 

@@ -14,6 +14,7 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
 import ProductItem from "../../components/shop/ProductItem";
 import HeaderButton from "../../components/UI/HeaderButton";
+import AddToCartButton from '../../components/UI/AddToCartButton';
 import * as cartActions from "../../store/actions/cart";
 import * as productsActions from "../../store/actions/products";
 import colors from "../../constants/colors";
@@ -25,6 +26,7 @@ const ProductsOverviewScreen = props => {
   const products = useSelector(
     state => state.products.availableProducts
   );
+  const cartItems = useSelector(state => state.cart.items);
   const dispatch = useDispatch();
 
   const loadProducts = useCallback(async () => {
@@ -116,8 +118,8 @@ const ProductsOverviewScreen = props => {
               }
             />
           </TouchableOpacity>
-          <Button
-            title="To Cart"
+          <AddToCartButton 
+            id={itemData.item.id}
             color={colors.primary}
             onPress={() => {
               dispatch(cartActions.addToCart(itemData.item));

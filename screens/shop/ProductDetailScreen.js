@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -7,41 +7,42 @@ import {
   ScrollView,
   StyleSheet
 } from "react-native";
-import {useSelector, useDispatch} from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import * as cartActions from "../../store/actions/cart";
 import colors from "../../constants/colors";
 
 const ProductDetailScreen = props => {
   const productId = props.navigation.getParam("productId");
+  const [added, setAdded] = useState(false);
+  const cartItems = useSelector(state => state.cart.items);
   const selectProduct = useSelector(state =>
-    state.products.availableProducts.find(
-      prod => prod.id === productId
-    )
+    state.products.availableProducts.find(prod => prod.id === productId)
   );
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    cartItems[productId] ? setAdded(true) : setAdded(false);
+  }, [cartItems]);
 
   return (
     <ScrollView>
       <Image
         style={styles.image}
-        source={{uri: selectProduct.imageUrl}}
+        source={{ uri: selectProduct.imageUrl }}
       />
       <View style={styles.actions}>
         <Button
           color={colors.primary}
-          title="Add to Cart"
+          title={added ? "In Cart" : "Add to Cart"}
+          disabled={added}
           onPress={() => {
             dispatch(cartActions.addToCart(selectProduct));
           }}
         />
       </View>
-      <Text style={styles.price}>
-        ${selectProduct.price.toFixed(2)}
-      </Text>
-      <Text style={styles.description}>
-        {selectProduct.description}
-      </Text>
+      <Text style={styles.price}>${selectProduct.price.toFixed(2)}</Text>
+      <Text style={styles.description}>{selectProduct.description}</Text>
     </ScrollView>
   );
 };

@@ -5,6 +5,7 @@ import {
   FlatList,
   StyleSheet,
   Button,
+  TouchableOpacity,
   ActivityIndicator
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
@@ -17,9 +18,7 @@ import colors from "../../constants/colors";
 
 const CartScreen = props => {
   const [isLoading, setIsLoading] = useState(false);
-  const cartTotalAmount = useSelector(
-    state => state.cart.totalAmount
-  );
+  const cartTotalAmount = useSelector(state => state.cart.totalAmount);
   const cartItems = useSelector(state => {
     const transformedCartItems = [];
     for (const key in state.cart.items) {
@@ -40,9 +39,7 @@ const CartScreen = props => {
 
   const sendOrderHandler = async () => {
     setIsLoading(true);
-    await dispatch(
-      ordersActions.addOrder(cartItems, cartTotalAmount)
-    );
+    await dispatch(ordersActions.addOrder(cartItems, cartTotalAmount));
     setIsLoading(false);
   };
 
@@ -72,13 +69,12 @@ const CartScreen = props => {
           <View>
             <Text style={{ fontSize: 16 }}>Cart Empty.</Text>
           </View>
-          <View>
-            <Button
-              title="Add Items"
-              color={colors.primary}
-              onPress={() => props.navigation.navigate('ProductsOverview')}
-            />
-          </View>
+          <TouchableOpacity
+            style={styles.emptyCartButton}
+            onPress={() => props.navigation.navigate("ProductsOverview")}
+          >
+            <Text style={styles.emptyCartButtonText}>Add Items</Text>
+          </TouchableOpacity>
         </View>
       ) : (
         <View>
@@ -93,10 +89,11 @@ const CartScreen = props => {
                 deleteable
                 onRemove={() => {
                   dispatch(
-                    cartActions.removeFromCart(
-                      itemData.item.productId
-                    )
+                    cartActions.removeFromCart(itemData.item.productId)
                   );
+                }}
+                onAdd={() => {
+                  dispatch(cartActions.addToCart(itemData.item));
                 }}
               />
             )}
@@ -132,6 +129,18 @@ const styles = StyleSheet.create({
   emptyCart: {
     alignItems: "center",
     justifyContent: "center"
+  },
+  emptyCartButton: {
+    marginVertical: 18,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderWidth: 2,
+    borderRadius: 10,
+    borderColor: colors.primary
+  },
+  emptyCartButtonText: {
+    fontSize: 16,
+    color: colors.primary
   }
 });
 
